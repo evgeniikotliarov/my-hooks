@@ -1,0 +1,26 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "linterOptions": {
+    "exclude": [
+      "node_modules/**/*.ts"
+    ]
+  },
+  "rules": {
+    "ordered-imports": true,
+    "member-access": false,
+    "interface-name": [true, "never-prefix"],
+    "object-literal-sort-keys": false,
+    "no-empty-interface": true,
+    "no-empty": true,
+    "member-ordering": false,
+    "await-promise": true,
+    "no-inferred-empty-object-type": false,
+    "no-duplicate-imports": true,
+    "no-implicit-dependencies": false,
+    "no-floating-promises": false
+  },
+  "defaultSeverity": "warning"
+}

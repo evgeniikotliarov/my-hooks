@@ -1,17 +1,44 @@
-import React from 'react';
-import {Route, Router, Switch} from 'react-router-dom';
-import {createBrowserHistory} from 'history';
+import React, {useState} from 'react';
+import {Navbar} from "./components/Navbar";
+import {TodoForm} from "./components/TodoForm";
+import {TodoList} from "./components/TodoList";
+import {Itodo} from "./interfaces";
 
-import {LOG_IN} from "./constants/paths.const";
-import LogInPage from "./containers/log-in.page";
+const App: React.FC = () => {
+  const [todos, setTodos] = useState<Array<Itodo>>([])
 
-export default function Application() {
-  const history = createBrowserHistory();
+  const addHandler = (title: string) => {
+    const newTodo: Itodo = {
+      title: title,
+      id: Date.now(),
+      completed: false
+    }
+    setTodos(prev => [newTodo, ...prev])
+  }
 
-  return <Router history={history}>
-    <Switch>
-      <Route exact path={LOG_IN}
-             render={props => <LogInPage {...props}/>}/>
-    </Switch>
-  </Router>;
+  const toggleHandler = (id: number) => {
+    setTodos(prev =>
+      prev.map(todo => {
+        if(todo.id === id) return {
+          ...todo,
+          completed: !todo.completed
+        }
+        return todo
+      })
+    )
+  }
+
+  const removeHandler = (id: number) => {
+    setTodos(prevState => prevState.filter(fil => fil.id !== id))
+  }
+
+  return <>
+    <Navbar/>
+    <div className={"container"}>
+      <TodoForm onAdd={addHandler}/>
+      <TodoList todos={todos} onRemove={removeHandler} onToggle={toggleHandler}/>
+    </div>
+  </>
 }
+
+export default App;

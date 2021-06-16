@@ -29,7 +29,10 @@ const App: React.FC = () => {
   }
 
   const removeHandler = (id: number) => {
-    setTodos(prevState => prevState.filter(fil => fil.id !== id))
+    const shoudRemove = window.confirm("Подтвердите удаление")
+    if(shoudRemove) {
+      setTodos(prevState => prevState.filter(fil => fil.id !== id))
+    }
   }
 
   return <>

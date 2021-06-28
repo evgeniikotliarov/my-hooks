@@ -11,3 +11,9 @@ export interface IUser {
   email: string;
   address: IAddress;
 }
+
+export interface Itodo {
+  id: number;
+  title: string;
+  completed: boolean;
+}

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {TodoForm} from "../components/TodoForm";
 import {TodoList} from "../components/TodoList";
 import {Itodo} from "../interfaces";
+import axios from "axios";
 
 declare var confirm: (question: string) => boolean;
 
@@ -9,13 +10,17 @@ export const TodosPage: React.FC = () => {
   const [todos, setTodos] = useState<Array<Itodo>>([])
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("todos") || '[]') as Itodo[]
-    setTodos(saved);
+    fetchTodos().then();
   }, [])
 
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos))
-  }, [todos])
+  async function fetchTodos() {
+    try {
+      const response = await axios.get<Itodo[]>('https://jsonplaceholder.typicode.com/todos?_limit=10');
+      setTodos(response.data)
+    } catch (e) {
+      alert(e)
+    }
+  }
 
   const addHandler = (title: string) => {
     const newTodo: Itodo = {

@@ -3,6 +3,7 @@ import {TodoForm} from "../components/TodoForm";
 import {TodoList} from "../components/TodoList";
 import {Itodo} from "../interfaces";
 import axios from "axios";
+import EventsExamples from "../components/EventsExamples";
 
 declare var confirm: (question: string) => boolean;
 
@@ -52,6 +53,7 @@ export const TodosPage: React.FC = () => {
 
   return (
     <React.Fragment>
+      <EventsExamples/>
       <div className={"container"}>
         <TodoForm onAdd={addHandler}/>
         <TodoList todos={todos} onRemove={removeHandler} onToggle={toggleHandler}/>

@@ -1,17 +1,28 @@
 import React from "react";
-import {Itodo} from "../interfaces";
+import {useTypedSelector} from "../hooks/useTypedSelector";
+import {useActions} from "../hooks/useActions";
 
 type TodoListProps = {
-  todos: Itodo[];
+  todos: any[];
   onToggle(id: number): void;
   onRemove: (id: number) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({todos, onRemove, onToggle}) => {
+export const TodoList: React.FC<TodoListProps> = ({ onRemove, onToggle}) => {
+
+  const {} = useActions()
+  const {loading, error, todos} = useTypedSelector(state => state.todo)
   if(todos.length === 0) {
     return (
       <p className={"center"}>To-do empty</p>
     )
+  }
+
+  if (loading) {
+    return <h1>Loading...</h1>
+  }
+  if (error) {
+    return <h1>{error}</h1>
   }
 
   const removeHandler = (event: React.MouseEvent, id: number) => {

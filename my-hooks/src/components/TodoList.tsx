@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useTypedSelector} from "../hooks/useTypedSelector";
 import {useActions} from "../hooks/useActions";
+import {setTodoPage} from "../store/action-creators/todo";
 
 type TodoListProps = {
   todos: any[];
@@ -8,10 +9,14 @@ type TodoListProps = {
   onRemove: (id: number) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ onRemove, onToggle}) => {
+export const TodoList: React.FC<TodoListProps> = () => {
+  const {loading, error, todos, limit, page} = useTypedSelector(state => state.todo)
+  const {fetchTodos, setTodoPage} = useActions();
+  const pages = [1,2,3,4,5];
+  useEffect(() => {
+    fetchTodos(page, limit)
+  }, [page])
 
-  const {} = useActions()
-  const {loading, error, todos} = useTypedSelector(state => state.todo)
   if(todos.length === 0) {
     return (
       <p className={"center"}>To-do empty</p>
@@ -25,28 +30,12 @@ export const TodoList: React.FC<TodoListProps> = ({ onRemove, onToggle}) => {
     return <h1>{error}</h1>
   }
 
-  const removeHandler = (event: React.MouseEvent, id: number) => {
-    event.preventDefault();
-    onRemove(id);
-  }
-
   return (
-    <ul>
-      {todos.map(todo => {
-        const classes = ["todo"];
-        if(todo.completed) {
-          classes.push("completed")
-        }
-        return (
-          <li className={classes.join(' ')} key={todo.id}>
-            <label>
-              <input type="checkbox" checked={todo.completed} onChange={onToggle.bind(null, todo.id)}/>
-              <span>{todo.title}</span>
-              <i className={"material-icons red-text"} onClick={event => removeHandler(event, todo.id)}>delete</i>
-            </label>
-          </li>
-        )
-      })}
-    </ul>
+    <div>
+      {todos.map(todo => <div key={todo.id}>{todo.id} - {todo.title}</div>)}
+      <div style={{display: "flex"}}>
+        {pages.map((p: number, index) => <div key={index} onClick={() => setTodoPage(p)} style={{border: p === page ? "2px solid green" : "1px solid gray", padding: "10px"}}>{p}</div>)}
+      </div>
+    </div>
   )
 }
